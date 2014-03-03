@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func Test() {
-	fmt.Println("Service.test")
+func Test(session int, source string, msg []byte) {
+	fmt.Printf("Service.test, session=%v source=%v, msg=%s\n", session, source, msg)
 }
 

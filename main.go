@@ -5,15 +5,14 @@ package main
 import (
 	"fmt"
 
+	"github.com/yangsf5/claw/center"
 	"github.com/yangsf5/claw/service"
 )
 
 func main() {
-	var services map[string]func()
-	services = make(map[string]func())
-	services["test"] = service.Test
+	center.Register("test", service.Test)
 
-	services["test"]()
+	center.Send("haha", "test", 1, []byte("hello, test service"))
 
 	fmt.Println("hell, claw!")
 }
