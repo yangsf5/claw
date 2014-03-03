@@ -4,19 +4,45 @@ package center
 
 type cb func(session int, source string, msg []byte)
 
+type message struct {
+	source string
+	session int
+	data []byte
+}
+
 var (
-	services map[string]cb
+	services map[string]chan<- message
 )
 
 func init() {
-	services = make(map[string]cb)
+	services = make(map[string]chan<- message)
 }
 
 func Register(name string, service cb) {
 	//TODO check repeated name
-	services[name] = service
+	channel := make(chan message)
+
+	go func() {
+		for {
+			select {
+			case msg, ok := <-channel:
+				if !ok {
+					return
+				}
+
+				service(msg.session, msg.source, msg.data)
+			}
+		}
+	}()
+
+	services[name] = channel
 }
 
 func Send(source, destination string, session int, msg []byte) {
-	services[destination](session, source, msg)
+	channel := services[destination]
+	channel <- message {
+		source: source,
+		session: session,
+		data: msg,
+	}
 }
