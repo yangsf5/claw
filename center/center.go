@@ -2,7 +2,14 @@
 
 package center
 
-type cb func(session int, source string, msg []byte)
+const (
+	MsgTypeText = iota
+	MsgTypeResponse
+	MsgTypeMulticast
+	MsgTypeClient
+	MsgTypeSystem
+	MsgTypeHarbor
+)
 
 type message struct {
 	source string
@@ -17,6 +24,8 @@ var (
 func init() {
 	services = make(map[string]chan<- message)
 }
+
+type cb func(session int, source string, msg []byte)
 
 func Register(name string, service cb) {
 	//TODO check repeated name
