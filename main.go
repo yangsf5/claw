@@ -17,7 +17,7 @@ func main() {
 	center.Send("haha", "Test", 1, []byte("hello, test service"))
 	center.Send("haha", "Error", 1, []byte("sth. is wrong"))
 
-	fmt.Println("hell, claw!")
+	fmt.Println("hello, claw!")
 
 	for {
 		time.Sleep(100 * time.Millisecond)
