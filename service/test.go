@@ -7,6 +7,6 @@ import (
 )
 
 func Test(session int, source string, msg []byte) {
-	fmt.Printf("Service.test, session=%v source=%v, msg=%s\n", session, source, msg)
+	fmt.Printf("Service.Test, session=%v source=%v, msg=%s\n", session, source, msg)
 }
 

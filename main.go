@@ -4,16 +4,23 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/yangsf5/claw/center"
 	"github.com/yangsf5/claw/service"
 )
 
 func main() {
-	center.Register("test", service.Test)
+	center.Register("Test", service.Test)
+	center.Register("Error", service.Error)
 
-	center.Send("haha", "test", 1, []byte("hello, test service"))
+	center.Send("haha", "Test", 1, []byte("hello, test service"))
+	center.Send("haha", "Error", 1, []byte("sth. is wrong"))
 
 	fmt.Println("hell, claw!")
+
+	for {
+		time.Sleep(100 * time.Millisecond)
+	}
 }
 

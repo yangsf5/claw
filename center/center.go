@@ -2,6 +2,10 @@
 
 package center
 
+import (
+//	"fmt"
+)
+
 const (
 	MsgTypeText = iota
 	MsgTypeResponse
