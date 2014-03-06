@@ -11,8 +11,7 @@ import (
 )
 
 func main() {
-	center.Register("Test", service.Test)
-	center.Register("Error", service.Error)
+	service.Start()
 
 	center.Send("haha", "Test", 1, []byte("hello, test service"))
 	center.Send("haha", "Error", 1, []byte("sth. is wrong"))
@@ -22,5 +21,7 @@ func main() {
 	for {
 		time.Sleep(100 * time.Millisecond)
 	}
+
+	fmt.Println("Claw exit!")
 }
 

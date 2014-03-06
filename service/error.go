@@ -4,8 +4,14 @@ package service
 
 import (
 	"fmt"
+
+	"github.com/yangsf5/claw/center"
 )
 
-func Error(session int, source string, msg []byte) {
+func init() {
+	center.Register("Error", errorReport)
+}
+
+func errorReport(session int, source string, msg []byte) {
 	fmt.Printf("Service.Error, session=%v source=%v, msg=%s\n", session, source, msg)
 }
