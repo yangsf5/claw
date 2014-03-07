@@ -35,7 +35,11 @@ func init() {
 }
 
 func Register(name string, service ClawCallback) {
-	//TODO check repeated name
+	_, ok := services[name]
+	if ok {
+		fmt.Println("[Center.Register] service name is existed, name=" + name)
+		os.Exit(2)
+	}
 	services[name] = service
 }
 
@@ -60,7 +64,7 @@ func Use(names []string) {
 
 			channels[name] = channel
 		} else {
-			fmt.Println("Service is not found, name=" + name)
+			fmt.Println("[Center.Use] service is not found, name=" + name)
 			os.Exit(2)
 		}
 	}
