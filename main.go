@@ -13,8 +13,8 @@ import (
 func main() {
 	fmt.Println("Claw start!")
 
-	service.Start()
-	center.Cancel("Test")
+	service.Register()
+	center.Use([]string{"Error", "Test", "Gate"})
 
 	center.Send("haha", "Test", 1, []byte("hello, test service"))
 	center.Send("haha", "Error", 1, []byte("sth. is wrong"))

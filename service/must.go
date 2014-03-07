@@ -3,9 +3,22 @@
 package service
 
 import (
-	"fmt"
+	"github.com/yangsf5/claw/center"
 )
 
-func Start() {
-	fmt.Println("Service doorman start, just against compile")
+
+func Register() {
+	services := map[string]center.ClawCallback{
+		"Error": errorReportCallback,
+		"Test": testCallback,
+		"Gate": gateCallback,
+	}
+
+	for name, cb := range services {
+		center.Register(name, cb)
+	}
+}
+
+func send(source, destination string, session int, msg []byte) {
+	center.Send(source, destination, session, msg)
 }

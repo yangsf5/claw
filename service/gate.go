@@ -5,12 +5,10 @@ package service
 import (
 	"fmt"
 	"net"
-	"github.com/yangsf5/claw/center"
 )
 
 func init() {
-	center.Register("Gate", gateCallback)
-	go gateListen()
+//	go gateListen()
 }
 
 func gateCallback(session int, source string, msg []byte) {

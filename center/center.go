@@ -4,6 +4,7 @@ package center
 
 import (
 	"fmt"
+	"os"
 )
 
 const (
@@ -21,55 +22,65 @@ type message struct {
 	data []byte
 }
 
+type ClawCallback func(session int, source string, msg []byte)
+
 var (
-	services map[string]chan<- message
+	services map[string]ClawCallback
+	channels map[string]chan<- message
 )
 
 func init() {
-	services = make(map[string]chan<- message)
+	services = make(map[string]ClawCallback)
+	channels = make(map[string]chan<- message)
 }
 
-type cb func(session int, source string, msg []byte)
-
-func Register(name string, service cb) {
+func Register(name string, service ClawCallback) {
 	//TODO check repeated name
-	channel := make(chan message)
-
-	go func() {
-		for {
-			select {
-			case msg, ok := <-channel:
-				if !ok {
-					return
-				}
-
-				service(msg.session, msg.source, msg.data)
-			}
-		}
-	}()
-
-	services[name] = channel
+	services[name] = service
 }
 
-func Cancel(name string) {
-	// Some services cannot be cancelled
-	needs := []string{"Error"}
-	for _, need := range needs {
-		if name == need {
-			Error("Center", "[Cancel] this service cannot be cancelled, name=" + name)
-			return
+func Use(names []string) {
+	for _, name := range names {
+		serv, ok := services[name]
+		if ok {
+			channel := make(chan message)
+
+			go func() {
+				for {
+					select {
+					case msg, ok := <-channel:
+						if !ok {
+							return
+						}
+
+						serv(msg.session, msg.source, msg.data)
+					}
+				}
+			}()
+
+			channels[name] = channel
+		} else {
+			fmt.Println("Service is not found, name=" + name)
+			os.Exit(2)
 		}
 	}
 
-	serv, ok := services[name]
-	if ok {
-		delete(services, name)
-		close(serv)
+	check()
+}
+
+func check() {
+	needs := []string{"Error"}
+	for _, need := range needs {
+		_, ok := channels[need]
+		if !ok {
+			fmt.Println("[Center.Check] lack a service, name=" + need)
+			os.Exit(2)
+		}
 	}
 }
 
 func Send(source, destination string, session int, msg []byte) {
-	channel, ok := services[destination]
+	channel, ok := channels[destination]
 	if !ok {
 		Error("Center", fmt.Sprintf("[Send] destination is not found, source=%s destination=%s", source, destination))
 		return

@@ -4,13 +4,7 @@ package service
 
 import (
 	"fmt"
-
-	"github.com/yangsf5/claw/center"
 )
-
-func init() {
-	center.Register("Error", errorReportCallback)
-}
 
 func errorReportCallback(session int, source string, msg []byte) {
 	fmt.Printf("Error, session=%v source=%v msg=[%s]\n", session, source, msg)
