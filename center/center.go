@@ -3,7 +3,7 @@
 package center
 
 import (
-//	"fmt"
+	"fmt"
 )
 
 const (
@@ -51,11 +51,37 @@ func Register(name string, service cb) {
 	services[name] = channel
 }
 
+func Cancel(name string) {
+	// Some services cannot be cancelled
+	needs := []string{"Error"}
+	for _, need := range needs {
+		if name == need {
+			Error("Center", "[Cancel] this service cannot be cancelled, name=" + name)
+			return
+		}
+	}
+
+	serv, ok := services[name]
+	if ok {
+		delete(services, name)
+		close(serv)
+	}
+}
+
 func Send(source, destination string, session int, msg []byte) {
-	channel := services[destination]
-	channel <- message {
+	channel, ok := services[destination]
+	if !ok {
+		Error("Center", fmt.Sprintf("[Send] destination is not found, source=%s destination=%s", source, destination))
+		return
+	}
+	channel <- message{
 		source: source,
 		session: session,
 		data: msg,
 	}
 }
+
+func Error(source, msg string) {
+	Send(source, "Error", 0, []byte(msg))
+}
+

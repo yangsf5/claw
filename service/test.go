@@ -9,10 +9,10 @@ import (
 )
 
 func init() {
-	center.Register("Test", test)
+	center.Register("Test", testCallback)
 }
 
-func test(session int, source string, msg []byte) {
+func testCallback(session int, source string, msg []byte) {
 	fmt.Printf("Service.Test, session=%v source=%v, msg=%s\n", session, source, msg)
 	center.Send("Test", "Error", 1, []byte("this from test"));
 }
