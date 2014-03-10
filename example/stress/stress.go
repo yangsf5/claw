@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	fmt.Println("Mock server of stress start!")
+	fmt.Println("Stress start!")
 
 	service.Register()
 	center.Use([]string{"Error", "Test", "Gate"})
@@ -23,6 +23,6 @@ func main() {
 		time.Sleep(100 * time.Millisecond)
 	}
 
-	fmt.Println("Claw exit!")
+	fmt.Println("Stress exit!")
 }
 

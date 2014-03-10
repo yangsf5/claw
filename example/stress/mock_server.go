@@ -7,5 +7,5 @@ import (
 )
 
 func main() {
-	fmt.Println("Stress start, based on claw!")
+	fmt.Println("Stress mock server start!")
 }
