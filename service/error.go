@@ -6,6 +6,12 @@ import (
 	"fmt"
 )
 
-func errorReportCallback(session int, source string, msg []byte) {
+type Error struct {
+}
+
+func (s *Error) ClawCallback(session int, source string, msg []byte) {
 	fmt.Printf("Error, session=%v source=%v msg=[%s]\n", session, source, msg)
+}
+
+func (s *Error) Start() {
 }

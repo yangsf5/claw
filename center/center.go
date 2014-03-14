@@ -22,19 +22,25 @@ type message struct {
 	data []byte
 }
 
-type ClawCallback func(session int, source string, msg []byte)
+type Service interface {
+	ClawCallback(session int, source string, msg []byte)
+
+	//RelyServices() []string
+
+	Start()
+}
 
 var (
-	services map[string]ClawCallback
+	services map[string]Service
 	channels map[string]chan<- message
 )
 
 func init() {
-	services = make(map[string]ClawCallback)
+	services = make(map[string]Service)
 	channels = make(map[string]chan<- message)
 }
 
-func Register(name string, service ClawCallback) {
+func Register(name string, service Service) {
 	_, ok := services[name]
 	if ok {
 		fmt.Println("[Center.Register] service name is existed, name=" + name)
@@ -47,6 +53,8 @@ func Use(names []string) {
 	for _, name := range names {
 		serv, ok := services[name]
 		if ok {
+			serv.Start()
+
 			channel := make(chan message)
 
 			go func() {
@@ -57,7 +65,7 @@ func Use(names []string) {
 							return
 						}
 
-						serv(msg.session, msg.source, msg.data)
+						serv.ClawCallback(msg.session, msg.source, msg.data)
 					}
 				}
 			}()

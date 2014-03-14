@@ -7,11 +7,14 @@ import (
 	"net"
 )
 
-func init() {
+type Gate struct {
+}
+
+func (s* Gate) Start() {
 //	go gateListen()
 }
 
-func gateCallback(session int, source string, msg []byte) {
+func (s* Gate) ClawCallback(session int, source string, msg []byte) {
 }
 
 func gateListen() {
