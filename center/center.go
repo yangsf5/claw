@@ -27,7 +27,7 @@ type Service interface {
 
 	//RelyServices() []string
 
-	Start()
+	ClawStart()
 }
 
 var (
@@ -53,7 +53,7 @@ func Use(names []string) {
 	for _, name := range names {
 		serv, ok := services[name]
 		if ok {
-			serv.Start()
+			serv.ClawStart()
 
 			channel := make(chan message)
 

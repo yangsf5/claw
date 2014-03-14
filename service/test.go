@@ -14,6 +14,6 @@ func (s* Test) ClawCallback(session int, source string, msg []byte) {
 	send("Test", "Error", 1, []byte("this from test"));
 }
 
-func (s* Test) Start() {
+func (s* Test) ClawStart() {
 	fmt.Println("Service.Test, funcion Start is called, test passes.")
 }

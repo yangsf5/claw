@@ -13,5 +13,5 @@ func (s *Error) ClawCallback(session int, source string, msg []byte) {
 	fmt.Printf("Error, session=%v source=%v msg=[%s]\n", session, source, msg)
 }
 
-func (s *Error) Start() {
+func (s *Error) ClawStart() {
 }

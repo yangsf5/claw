@@ -10,11 +10,12 @@ import (
 type Gate struct {
 }
 
-func (s* Gate) Start() {
-//	go gateListen()
-}
 
 func (s* Gate) ClawCallback(session int, source string, msg []byte) {
+}
+
+func (s* Gate) ClawStart() {
+//	go gateListen()
 }
 
 func gateListen() {
