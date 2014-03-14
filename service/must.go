@@ -9,6 +9,7 @@ import (
 
 func Register() {
 	services := map[string]center.Service{
+		"Master": &Master{},
 		"Harbor": &Harbor{},
 		"Error": &Error{},
 		"Test": &Test{},
