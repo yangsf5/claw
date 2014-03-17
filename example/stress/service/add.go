@@ -26,6 +26,6 @@ func (s *Add) ClawStart() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Res", res)
+	fmt.Println("Service.Add Res", res)
 }
 

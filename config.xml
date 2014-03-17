@@ -1,0 +1,4 @@
+<?xml version="2.0" encoding="utf-8"?>
+<clawconfig name="config" version="1.0">
+	<master listenAddr=":8889"></master>
+</clawconfig>

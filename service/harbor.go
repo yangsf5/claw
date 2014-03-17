@@ -8,6 +8,7 @@ import (
 	"encoding/gob"
 	"net"
 
+	"github.com/yangsf5/claw/center"
 	"github.com/yangsf5/claw/service/master"
 )
 
@@ -19,7 +20,9 @@ func (s *Harbor) ClawCallback(session int, source string, msg []byte) {
 }
 
 func (s *Harbor) ClawStart() {
-	go s.connect()
+	if !*center.IsMaster {
+		go s.connect()
+	}
 }
 
 func (s *Harbor) connect() {

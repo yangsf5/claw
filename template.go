@@ -10,6 +10,9 @@ import (
 	"github.com/yangsf5/claw/service"
 )
 
+var (
+)
+
 func main() {
 	fmt.Println("Claw start!")
 

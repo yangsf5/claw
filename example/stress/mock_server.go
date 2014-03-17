@@ -14,7 +14,7 @@ import (
 type Math int
 
 func (m *Math) Add(req *proto.ReqAdd, res *int) error {
-	fmt.Printf("Server accept Math.Add, req=%v", req)
+	fmt.Printf("Server accept Math.Add, req=%v\n", req)
 	*res = req.A + req.B
 	return nil
 }
