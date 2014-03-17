@@ -2,6 +2,11 @@
 
 package master
 
+
+type Handler interface {
+	Handle(node *Node)
+}
+
 const (
 	LOGIN = iota
 )
@@ -10,18 +15,20 @@ type Login struct {
 	Name string
 }
 
+func (m *Login) Handle(node *Node) {
+	addNode(node)
+}
+
 type Command struct {
 	Name string
 }
 
 var (
-	packets map[uint16]func()interface{}
+	handlers map[uint16]Handler
 )
 
 func init() {
-	packets = make(map[uint16]func()interface{})
+	handlers = make(map[uint16]Handler)
 
-	packets[LOGIN] = func() interface{} {
-		return &Login{}
-	}
+	handlers[LOGIN] = &Login{}
 }

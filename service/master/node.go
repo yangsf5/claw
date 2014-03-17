@@ -7,6 +7,7 @@ import (
 	"encoding/binary"
 	"encoding/gob"
 	"fmt"
+	"io"
 	"net"
 )
 
@@ -33,39 +34,28 @@ func (n *Node) Handle() {
 
 		bodyBuf := make([]byte, size)
 		_, err = n.conn.Read(bodyBuf[:])
-		if err != nil {
+		if err != nil && err != io.EOF {
 			break
 		}
 
 		var packetId uint16
 		binary.Read(bytes.NewBuffer(bodyBuf), binary.BigEndian, &packetId)
-		packetFunc, ok := packets[packetId]
+		handler, ok := handlers[packetId]
 		if !ok {
 			fmt.Printf("packet id error, pid=%d\n", packetId)
 			continue
 		}
-		packet := packetFunc()
 		msgBuf := bytes.NewBuffer(bodyBuf[2:])
-		err = gob.NewDecoder(msgBuf).Decode(packet)
+		err = gob.NewDecoder(msgBuf).Decode(handler)
 		if err != nil {
 			fmt.Printf("packet decode error, pid=%d\n", packetId)
 			continue
 		}
 
-		fmt.Println("packet is", packet)
+		fmt.Println("packet is", handler)
+
+		handler.Handle(n)
 	}
+	fmt.Println("Node die")
 }
 
-
-var (
-	nodes map[string]*Node
-)
-
-func init() {
-	nodes = make(map[string]*Node)
-}
-
-func HandleConnection(conn net.Conn) {
-	node := NewNode(conn)
-	go node.Handle()
-}

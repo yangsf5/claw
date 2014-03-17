@@ -40,7 +40,7 @@ func (s *Harbor) connect() {
 	}
 
 	var headBuffer bytes.Buffer
-	binary.Write(&headBuffer, binary.BigEndian, 2 + buffer.Len())
+	binary.Write(&headBuffer, binary.BigEndian, uint16(2 + buffer.Len()))
 	binary.Write(&headBuffer, binary.BigEndian, uint16(master.LOGIN))
 	s.send(headBuffer.Bytes())
 	s.send(buffer.Bytes())
