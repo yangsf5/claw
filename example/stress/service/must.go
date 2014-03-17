@@ -8,8 +8,8 @@ import (
 
 
 func Register() {
-	services := map[string]center.ClawCallback{
-		"Add": addCallback,
+	services := map[string]center.Service{
+		"Add": &Add{},
 	}
 
 	for name, cb := range services {

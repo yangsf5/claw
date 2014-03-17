@@ -8,7 +8,13 @@ import (
 	"github.com/yangsf5/claw/example/stress/proto"
 )
 
-func init() {
+type Add struct {
+}
+
+func (s *Add) ClawCallback(session int, source string, msg []byte) {
+}
+
+func (s *Add) ClawStart() {
 	client, err := rpc.DialHTTP("tcp", "127.0.0.1:1234")
 	if err != nil {
 		panic(err)
@@ -23,5 +29,3 @@ func init() {
 	fmt.Println("Res", res)
 }
 
-func addCallback(session int, source string, msg []byte) {
-}
