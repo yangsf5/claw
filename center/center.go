@@ -19,11 +19,11 @@ const (
 type message struct {
 	source string
 	session int
-	data []byte
+	data interface{}
 }
 
 type Service interface {
-	ClawCallback(session int, source string, msg []byte)
+	ClawCallback(session int, source string, msg interface{})
 
 	//RelyServices() []string
 
@@ -91,7 +91,7 @@ func check() {
 	}
 }
 
-func Send(source, destination string, session int, msg []byte) {
+func Send(source, destination string, session int, msg interface{}) {
 	channel, ok := channels[destination]
 	if !ok {
 		Error("Center", fmt.Sprintf("[Send] destination is not found, source=%s destination=%s", source, destination))
@@ -105,6 +105,6 @@ func Send(source, destination string, session int, msg []byte) {
 }
 
 func Error(source, msg string) {
-	Send(source, "Error", 0, []byte(msg))
+	Send(source, "Error", 0, msg)
 }
 

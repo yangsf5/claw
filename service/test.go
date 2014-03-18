@@ -9,9 +9,9 @@ import (
 type Test struct {
 }
 
-func (s* Test) ClawCallback(session int, source string, msg []byte) {
+func (s* Test) ClawCallback(session int, source string, msg interface{}) {
 	fmt.Printf("Service.Test, session=%v source=%v, msg=%s\n", session, source, msg)
-	send("Test", "Error", 1, []byte("this from test"));
+	send("Test", "Error", 1, "this from test");
 }
 
 func (s* Test) ClawStart() {
