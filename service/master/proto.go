@@ -16,11 +16,19 @@ type Login struct {
 }
 
 func (m *Login) Handle(node *Node) {
-	addNode(node)
+	nodes.AddPeer(node.Name, node)
 }
 
 type Command struct {
 	Name string
+}
+
+type Broadcast struct {
+	Content []byte
+}
+
+func (m *Broadcast) Handle(node *Node) {
+	nodes.Broadcast(m.Content)
 }
 
 var (

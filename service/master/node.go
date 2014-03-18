@@ -59,3 +59,10 @@ func (n *Node) Handle() {
 	fmt.Println("Node die")
 }
 
+func (n *Node) Send(msg []byte) {
+	_, err := n.conn.Write(msg)
+	if err != nil {
+		//TODO
+	}
+}
+

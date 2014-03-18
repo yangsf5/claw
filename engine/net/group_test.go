@@ -6,11 +6,11 @@ import (
 	"testing"
 )
 
-type UserTmp struct {
+type PeerTmp struct {
 	uid string
 }
 
-func (u *UserTmp) Send(msg string) {
+func (u *PeerTmp) Send(msg []byte) {
 }
 
 
@@ -24,6 +24,6 @@ func init() {
 
 
 func TestGroup(t *testing.T) {
-	g.AddUser("user1", &UserTmp{"user1"})
-	g.AddUser("user2", &UserTmp{"user2"})
+	g.AddPeer("user1", &PeerTmp{"user1"})
+	g.AddPeer("user2", &PeerTmp{"user2"})
 }

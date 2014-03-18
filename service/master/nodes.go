@@ -3,21 +3,15 @@
 package master
 
 import (
+	"github.com/yangsf5/claw/engine/net"
 )
 
 var (
-	nodes map[string]*Node
+	nodes *net.Group
 )
 
 func init() {
-	nodes = make(map[string]*Node)
+	nodes = net.NewGroup()
 }
 
-func addNode(node *Node) {
-	//TODO check repeat
-	nodes[node.Name] = node
-}
 
-func delNode(node *Node) {
-	delete(nodes, node.Name)
-}

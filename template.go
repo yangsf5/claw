@@ -19,8 +19,8 @@ func main() {
 	service.Register()
 	center.Use([]string{"Error", "Master", "Harbor", "Test", "Gate"})
 
-	center.Send("haha", "Test", 1, []byte("hello, test service"))
-	center.Send("haha", "Error", 1, []byte("sth. is wrong"))
+	center.Send("main", "Test", 1, []byte("hello, test service"))
+	center.Send("main", "Error", 1, []byte("sth. is wrong"))
 
 	for {
 		time.Sleep(100 * time.Millisecond)
