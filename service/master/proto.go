@@ -2,6 +2,9 @@
 
 package master
 
+import (
+	"fmt"
+)
 
 type Handler interface {
 	Handle(node *Node)
@@ -9,6 +12,7 @@ type Handler interface {
 
 const (
 	LOGIN = iota
+	BROADCAST
 )
 
 type Login struct {
@@ -16,11 +20,9 @@ type Login struct {
 }
 
 func (m *Login) Handle(node *Node) {
-	nodes.AddPeer(node.Name, node)
-}
-
-type Command struct {
-	Name string
+	if ret := nodes.AddPeer(node.Name, node); !ret {
+		fmt.Println("master.proto add peer fail, repeated")
+	}
 }
 
 type Broadcast struct {
@@ -39,4 +41,5 @@ func init() {
 	handlers = make(map[uint16]Handler)
 
 	handlers[LOGIN] = &Login{}
+	handlers[BROADCAST] = &Broadcast{}
 }

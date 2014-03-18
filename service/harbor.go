@@ -6,6 +6,8 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/gob"
+	"fmt"
+	"io"
 	"net"
 
 	"github.com/yangsf5/claw/center"
@@ -44,11 +46,45 @@ func (s *Harbor) connect() {
 	binary.Write(&headBuffer, binary.BigEndian, uint16(master.LOGIN))
 	s.send(headBuffer.Bytes())
 	s.send(buffer.Bytes())
+
+	s.recv()
 }
 
 func (s *Harbor) send(buf []byte) {
 	_, err := s.masterConn.Write(buf)
 	if err != nil {
 		panic(err)
+	}
+}
+
+func (s *Harbor) recv() {
+	for {
+		var sizeBuf [2]byte
+		_, err := s.masterConn.Read(sizeBuf[:])
+		if err != nil {
+			break
+		}
+		var size uint16
+		binary.Read(bytes.NewBuffer(sizeBuf[:]), binary.BigEndian, &size)
+
+		msg := make([]byte, size)
+		_, err = s.masterConn.Read(msg[:])
+		if err != nil && err != io.EOF {
+			break
+		}
+
+		handleBroadcast(msg)
+	}
+}
+
+func handleBroadcast(msg []byte) {
+	cmd := string(msg)
+	switch cmd {
+	case "start":
+		fmt.Println("Service.Harbor, start")
+	case "stop":
+		fmt.Println("Service.Harbor, stop")
+	default:
+		fmt.Println("Service.Harbor, unkown cmd")
 	}
 }

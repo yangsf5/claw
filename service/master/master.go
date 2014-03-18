@@ -10,3 +10,10 @@ func HandleConnection(conn net.Conn) {
 	node := NewNode(conn)
 	go node.Handle()
 }
+
+func HandleClawCallback(msg interface{}) {
+	if handler, ok := msg.(Handler); ok {
+		//TODO tidy this type handle
+		handler.Handle(nil)
+	}
+}

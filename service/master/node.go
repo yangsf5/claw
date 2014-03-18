@@ -27,6 +27,7 @@ func (n *Node) Handle() {
 		var sizeBuf [2]byte
 		_, err := n.conn.Read(sizeBuf[:])
 		if err != nil {
+			fmt.Printf("packet id error, err=%s\n", err.Error())
 			break
 		}
 		var size uint16
@@ -56,11 +57,19 @@ func (n *Node) Handle() {
 
 		handler.Handle(n)
 	}
+
+	nodes.DelPeer(n.Name)
 	fmt.Println("Node die")
 }
 
 func (n *Node) Send(msg []byte) {
-	_, err := n.conn.Write(msg)
+	var headBuffer bytes.Buffer
+	binary.Write(&headBuffer, binary.BigEndian, uint16(len(msg)))
+	_, err := n.conn.Write(headBuffer.Bytes())
+	if err != nil {
+		//TODO
+	}
+	_, err = n.conn.Write(msg)
 	if err != nil {
 		//TODO
 	}
