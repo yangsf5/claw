@@ -11,10 +11,14 @@ import (
 var (
 	configFile = flag.String("config", "./config.xml", "config file name")
 	IsMaster = flag.Bool("isMaster", false, "this server is master?")
+
+	BaseConfig ConfigPack
 )
 
 func init() {
 	flag.Parse()
+
+	GetConfig(&BaseConfig)
 }
 
 func GetConfig(v interface{}) {
@@ -27,4 +31,15 @@ func GetConfig(v interface{}) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+
+// Base config
+type ConfigPack struct {
+	XMLName xml.Name `xml:"clawconfig"`
+	Master MasterConfig `xml:"master"`
+}
+
+type MasterConfig struct {
+	ListenAddr string `xml:"listenAddr,attr"`
 }

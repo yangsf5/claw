@@ -3,7 +3,6 @@
 package service
 
 import (
-	"encoding/xml"
 	"fmt"
 	"net"
 
@@ -27,20 +26,8 @@ func (s *Master) ClawStart() {
 	}
 }
 
-type MasterConfigPack struct {
-	XMLName xml.Name `xml:"clawconfig"`
-	Master MasterConfig `xml:"master"`
-}
-
-type MasterConfig struct {
-	ListenAddr string `xml:"listenAddr,attr"`
-}
-
 func (s *Master) Listen() {
-	var config MasterConfigPack
-	center.GetConfig(&config)
-
-	tcpAddr, err := net.ResolveTCPAddr("tcp", config.Master.ListenAddr)
+	tcpAddr, err := net.ResolveTCPAddr("tcp", center.BaseConfig.Master.ListenAddr)
 	if err != nil {
 		panic(err)
 	}
@@ -49,7 +36,7 @@ func (s *Master) Listen() {
 		panic(err)
 	}
 
-	fmt.Println("Service.Master listening", config.Master.ListenAddr)
+	fmt.Println("Service.Master listening", center.BaseConfig.Master.ListenAddr)
 
 	for {
 		conn, err := listener.Accept()

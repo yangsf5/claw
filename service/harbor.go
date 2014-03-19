@@ -29,7 +29,7 @@ func (s *Harbor) ClawStart() {
 
 func (s *Harbor) connect() {
 	var err error
-	s.masterConn, err = net.Dial("tcp", "127.0.0.1:8889")
+	s.masterConn, err = net.Dial("tcp", center.BaseConfig.Master.ListenAddr)
 	if err != nil {
 		panic(err)
 	}
