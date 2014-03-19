@@ -4,11 +4,13 @@ package master
 
 import (
 	"bytes"
+	"bufio"
 	"encoding/binary"
 	"encoding/gob"
 	"fmt"
-	"io"
 	"net"
+
+	myNet "github.com/yangsf5/claw/engine/net"
 )
 
 type Node struct {
@@ -23,34 +25,46 @@ func NewNode(conn net.Conn) *Node {
 }
 
 func (n *Node) Handle() {
-	for {
-		var sizeBuf [2]byte
-		_, err := n.conn.Read(sizeBuf[:])
+	defer n.conn.Close()
+
+	cb := func(reader *bufio.Reader, err error) {
 		if err != nil {
-			fmt.Printf("packet id error, err=%s\n", err.Error())
-			break
+			nodes.DelPeer(n.Name)
+			fmt.Println("Node die")
+			return
+		}
+
+		// Check size
+		sizeBuf, err := reader.Peek(2)
+		if err != nil {
+			return
 		}
 		var size uint16
-		binary.Read(bytes.NewBuffer(sizeBuf[:]), binary.BigEndian, &size)
-
-		bodyBuf := make([]byte, size)
-		_, err = n.conn.Read(bodyBuf[:])
-		if err != nil && err != io.EOF {
-			break
+		binary.Read(bytes.NewBuffer(sizeBuf), binary.BigEndian, &size)
+		if _, err = reader.Peek(2+int(size)); err != nil {
+			return
 		}
 
+		// Read Body
+		packBuf := make([]byte, 2 + int(size))
+		reader.Read(packBuf)
+		bodyBuf := packBuf[2:]
+
+		// Parse packet id from body
 		var packetId uint16
 		binary.Read(bytes.NewBuffer(bodyBuf), binary.BigEndian, &packetId)
 		handler, ok := handlers[packetId]
 		if !ok {
 			fmt.Printf("packet id error, pid=%d\n", packetId)
-			continue
+			return
 		}
+
+		// Decode message from body
 		msgBuf := bytes.NewBuffer(bodyBuf[2:])
 		err = gob.NewDecoder(msgBuf).Decode(handler)
 		if err != nil {
-			fmt.Printf("packet decode error, pid=%d\n", packetId)
-			continue
+			fmt.Printf("packet decode error, pid=%d err=%s\n", packetId, err.Error())
+			return
 		}
 
 		fmt.Println("packet is", handler)
@@ -58,8 +72,7 @@ func (n *Node) Handle() {
 		handler.Handle(n)
 	}
 
-	nodes.DelPeer(n.Name)
-	fmt.Println("Node die")
+	myNet.RecvLoop(n.conn, cb)
 }
 
 func (n *Node) Send(msg []byte) {
