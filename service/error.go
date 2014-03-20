@@ -9,7 +9,7 @@ import (
 type Error struct {
 }
 
-func (s *Error) ClawCallback(session int, source string, msg interface{}) {
+func (s *Error) ClawCallback(session int, source string, msgType int, msg interface{}) {
 	fmt.Printf("Error, session=%v source=%v msg=[%s]\n", session, source, msg)
 }
 

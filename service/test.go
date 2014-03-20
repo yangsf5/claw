@@ -4,14 +4,16 @@ package service
 
 import (
 	"fmt"
+
+	"github.com/yangsf5/claw/center"
 )
 
 type Test struct {
 }
 
-func (s* Test) ClawCallback(session int, source string, msg interface{}) {
+func (s* Test) ClawCallback(session int, source string, msgType int, msg interface{}) {
 	fmt.Printf("Service.Test, session=%v source=%v, msg=%s\n", session, source, msg)
-	send("Test", "Error", 1, "this from test");
+	send("Test", "Error", 1, center.MsgTypeText, "this from test");
 }
 
 func (s* Test) ClawStart() {

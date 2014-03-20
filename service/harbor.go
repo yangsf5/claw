@@ -18,7 +18,7 @@ type Harbor struct {
 	masterConn net.Conn
 }
 
-func (s *Harbor) ClawCallback(session int, source string, msg interface{}) {
+func (s *Harbor) ClawCallback(session int, source string, msgType int, msg interface{}) {
 }
 
 func (s *Harbor) ClawStart() {

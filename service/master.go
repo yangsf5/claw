@@ -14,7 +14,7 @@ import (
 type Master struct {
 }
 
-func (s *Master) ClawCallback(session int, source string, msg interface{}) {
+func (s *Master) ClawCallback(session int, source string, msgType int, msg interface{}) {
 	master.HandleClawCallback(msg)
 }
 

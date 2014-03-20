@@ -29,9 +29,9 @@ func main() {
 			case 1:
 				fmt.Println("show")
 			case 2:
-				center.Send("main", "Master", 0, &master.Broadcast{[]byte("start")})
+				center.Send("main", "Master", 0, center.MsgTypeHarbor, &master.Broadcast{[]byte("start")})
 			case 3:
-				center.Send("main", "Master", 0, &master.Broadcast{[]byte("stop")})
+				center.Send("main", "Master", 0, center.MsgTypeHarbor, &master.Broadcast{[]byte("stop")})
 			default:
 				fmt.Println("Unkown operation.")
 			}

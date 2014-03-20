@@ -11,7 +11,7 @@ import (
 type Add struct {
 }
 
-func (s *Add) ClawCallback(session int, source string, msg interface{}) {
+func (s *Add) ClawCallback(session int, source string, msgType int, msg interface{}) {
 }
 
 func (s *Add) ClawStart() {

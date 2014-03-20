@@ -17,6 +17,6 @@ func Register() {
 	}
 }
 
-func send(source, destination string, session int, msg interface{}) {
-	center.Send(source, destination, session, msg)
+func send(source, destination string, session int, msgType int, msg interface{}) {
+	center.Send(source, destination, session, msgType, msg)
 }

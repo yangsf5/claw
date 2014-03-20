@@ -19,11 +19,12 @@ const (
 type message struct {
 	source string
 	session int
+	dataType int
 	data interface{}
 }
 
 type Service interface {
-	ClawCallback(session int, source string, msg interface{})
+	ClawCallback(session int, source string, msgType int, msg interface{})
 
 	//RelyServices() []string
 
@@ -65,7 +66,7 @@ func Use(names []string) {
 							return
 						}
 
-						serv.ClawCallback(msg.session, msg.source, msg.data)
+						serv.ClawCallback(msg.session, msg.source, msg.dataType, msg.data)
 					}
 				}
 			}()
@@ -91,7 +92,7 @@ func check() {
 	}
 }
 
-func Send(source, destination string, session int, msg interface{}) {
+func Send(source, destination string, session int, msgType int, msg interface{}) {
 	channel, ok := channels[destination]
 	if !ok {
 		Error("Center", fmt.Sprintf("[Send] destination is not found, source=%s destination=%s", source, destination))
@@ -100,11 +101,12 @@ func Send(source, destination string, session int, msg interface{}) {
 	channel <- message{
 		source: source,
 		session: session,
+		dataType: msgType,
 		data: msg,
 	}
 }
 
 func Error(source, msg string) {
-	Send(source, "Error", 0, msg)
+	Send(source, "Error", 0, MsgTypeText, msg)
 }
 

@@ -11,7 +11,7 @@ type Gate struct {
 }
 
 
-func (s* Gate) ClawCallback(session int, source string, msg interface{}) {
+func (s* Gate) ClawCallback(session int, source string, msgType int, msg interface{}) {
 }
 
 func (s* Gate) ClawStart() {
