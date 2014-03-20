@@ -73,18 +73,16 @@ func (s *Harbor) recv() {
 			break
 		}
 
-		handleBroadcast(msg)
+		remoteMsg := new(RemoteMessage)
+		if err = gob.NewDecoder(bytes.NewBuffer(msg)).Decode(remoteMsg); err != nil {
+			fmt.Println("Remote message decode error")
+		}
+
+		handleBroadcast(remoteMsg)
 	}
 }
 
-func handleBroadcast(msg []byte) {
-	cmd := string(msg)
-	switch cmd {
-	case "start":
-		fmt.Println("Service.Harbor, start")
-	case "stop":
-		fmt.Println("Service.Harbor, stop")
-	default:
-		fmt.Println("Service.Harbor, unkown cmd")
-	}
+func handleBroadcast(msg *RemoteMessage) {
+	send("Harbor", msg.Destination, 0, msg.MessageType, msg.Message)
 }
+

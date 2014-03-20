@@ -8,7 +8,6 @@ import (
 
 	"github.com/yangsf5/claw/center"
 	"github.com/yangsf5/claw/service"
-	"github.com/yangsf5/claw/service/master"
 	myService "github.com/yangsf5/claw/example/stress/service"
 )
 
@@ -29,9 +28,9 @@ func main() {
 			case 1:
 				fmt.Println("show")
 			case 2:
-				center.Send("main", "Master", 0, center.MsgTypeHarbor, &master.Broadcast{[]byte("start")})
+				center.Send("main", "Master", 0, center.MsgTypeHarbor, &service.RemoteMessage{"StressAdd", center.MsgTypeHarbor, []byte("start")})
 			case 3:
-				center.Send("main", "Master", 0, center.MsgTypeHarbor, &master.Broadcast{[]byte("stop")})
+				center.Send("main", "Master", 0, center.MsgTypeHarbor, &service.RemoteMessage{"StressAdd", center.MsgTypeHarbor, []byte("stop")})
 			default:
 				fmt.Println("Unkown operation.")
 			}

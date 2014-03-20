@@ -3,6 +3,8 @@
 package service
 
 import (
+	"bytes"
+	"encoding/gob"
 	"fmt"
 	"net"
 
@@ -10,12 +12,28 @@ import (
 	"github.com/yangsf5/claw/service/master"
 )
 
+type RemoteMessage struct {
+	Destination string
+	MessageType int
+	Message []byte
+}
 
 type Master struct {
 }
 
 func (s *Master) ClawCallback(session int, source string, msgType int, msg interface{}) {
-	master.HandleClawCallback(msg)
+	fmt.Printf("Service.Master recv type=%v msg=%v\n", msgType, msg)
+	switch msgType {
+	case center.MsgTypeHarbor:
+		if concrete, ok := msg.(*RemoteMessage); ok {
+			var buffer bytes.Buffer
+			if err := gob.NewEncoder(&buffer).Encode(concrete); err != nil {
+				fmt.Println("err", err.Error())
+				break
+			}
+			master.Broadcast(buffer.Bytes())
+		}
+	}
 }
 
 func (s *Master) ClawStart() {

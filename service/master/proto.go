@@ -25,14 +25,6 @@ func (m *Login) Handle(node *Node) {
 	}
 }
 
-type Broadcast struct {
-	Content []byte
-}
-
-func (m *Broadcast) Handle(node *Node) {
-	nodes.Broadcast(m.Content)
-}
-
 var (
 	handlers map[uint16]Handler
 )
@@ -41,5 +33,4 @@ func init() {
 	handlers = make(map[uint16]Handler)
 
 	handlers[LOGIN] = &Login{}
-	handlers[BROADCAST] = &Broadcast{}
 }
