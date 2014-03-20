@@ -35,7 +35,7 @@ func (s *Harbor) connect() {
 	}
 
 	var buffer bytes.Buffer
-	login := &master.Login{"harbor1"}
+	login := &master.Login{center.BaseConfig.Harbor.Id}
 	err = gob.NewEncoder(&buffer).Encode(login)
 	if err != nil {
 		panic(err)

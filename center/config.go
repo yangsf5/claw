@@ -12,7 +12,7 @@ var (
 	configFile = flag.String("config", "./config.xml", "config file name")
 	IsMaster = flag.Bool("isMaster", false, "this server is master?")
 
-	BaseConfig ConfigPack
+	BaseConfig BaseConfigPack
 )
 
 func init() {
@@ -35,11 +35,16 @@ func GetConfig(v interface{}) {
 
 
 // Base config
-type ConfigPack struct {
+type BaseConfigPack struct {
 	XMLName xml.Name `xml:"clawconfig"`
 	Master MasterConfig `xml:"master"`
+	Harbor HarborConfig `xml:"harbor"`
 }
 
 type MasterConfig struct {
 	ListenAddr string `xml:"listenAddr,attr"`
+}
+
+type HarborConfig struct {
+	Id string `xml:"id,attr"`
 }
