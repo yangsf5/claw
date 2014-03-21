@@ -10,7 +10,6 @@ import (
 
 var (
 	configFile = flag.String("config", "./config.xml", "config file name")
-	IsMaster = flag.Bool("isMaster", false, "this server is master?")
 
 	BaseConfig BaseConfigPack
 )
@@ -43,6 +42,7 @@ type BaseConfigPack struct {
 
 type MasterConfig struct {
 	ListenAddr string `xml:"listenAddr,attr"`
+	IsMaster bool `xml:"isMaster,attr"`
 }
 
 type HarborConfig struct {

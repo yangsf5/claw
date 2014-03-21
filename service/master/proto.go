@@ -20,17 +20,18 @@ type Login struct {
 }
 
 func (m *Login) Handle(node *Node) {
+	node.Name = m.Name
 	if ret := nodes.AddPeer(node.Name, node); !ret {
-		fmt.Println("master.proto add peer fail, repeated")
+		fmt.Println("Master.proto add peer fail, repeated, node.Name:", node.Name)
 	}
 }
 
 var (
-	handlers map[uint16]Handler
+	handlers map[uint16]func() Handler
 )
 
 func init() {
-	handlers = make(map[uint16]Handler)
+	handlers = make(map[uint16]func() Handler)
 
-	handlers[LOGIN] = &Login{}
+	handlers[LOGIN] = func() Handler { return &Login{} }
 }

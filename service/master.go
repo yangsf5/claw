@@ -37,7 +37,7 @@ func (s *Master) ClawCallback(session int, source string, msgType int, msg inter
 }
 
 func (s *Master) ClawStart() {
-	if *center.IsMaster {
+	if center.BaseConfig.Master.IsMaster {
 		go s.Listen()
 	} else {
 		fmt.Println("this server is not master, so service.master not start")

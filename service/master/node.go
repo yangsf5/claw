@@ -53,13 +53,14 @@ func (n *Node) Handle() {
 		// Parse packet id from body
 		var packetId uint16
 		binary.Read(bytes.NewBuffer(bodyBuf), binary.BigEndian, &packetId)
-		handler, ok := handlers[packetId]
+		handlerFunc, ok := handlers[packetId]
 		if !ok {
 			fmt.Printf("packet id error, pid=%d\n", packetId)
 			return
 		}
 
 		// Decode message from body
+		handler := handlerFunc()
 		msgBuf := bytes.NewBuffer(bodyBuf[2:])
 		err = gob.NewDecoder(msgBuf).Decode(handler)
 		if err != nil {

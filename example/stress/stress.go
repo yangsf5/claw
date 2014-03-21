@@ -18,7 +18,7 @@ func main() {
 	myService.Register()
 	center.Use([]string{"Error", "Master", "Harbor", "Gate", "StressAdd"})
 
-	if *center.IsMaster {
+	if center.BaseConfig.Master.IsMaster {
 		for {
 			prompt()
 			var i int

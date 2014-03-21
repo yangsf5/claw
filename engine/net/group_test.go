@@ -25,5 +25,10 @@ func init() {
 
 func TestGroup(t *testing.T) {
 	g.AddPeer("user1", &PeerTmp{"user1"})
-	g.AddPeer("user2", &PeerTmp{"user2"})
+	if g.AddPeer("user1", &PeerTmp{"user1"}) {
+		t.Error("Repeated add peer should fail")
+	}
+	if g.AddPeer("user2", &PeerTmp{"user2"}) == false {
+		t.Error("Add a new peer should success")
+	}
 }

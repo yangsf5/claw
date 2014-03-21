@@ -22,7 +22,7 @@ func (s *Harbor) ClawCallback(session int, source string, msgType int, msg inter
 }
 
 func (s *Harbor) ClawStart() {
-	if !*center.IsMaster {
+	if !center.BaseConfig.Master.IsMaster {
 		go s.connect()
 	}
 }
