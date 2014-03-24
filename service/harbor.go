@@ -6,10 +6,10 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/gob"
-	"fmt"
 	"io"
 	"net"
 
+	"github.com/golang/glog"
 	"github.com/yangsf5/claw/center"
 	"github.com/yangsf5/claw/service/master"
 )
@@ -75,7 +75,7 @@ func (s *Harbor) recv() {
 
 		remoteMsg := new(RemoteMessage)
 		if err = gob.NewDecoder(bytes.NewBuffer(msg)).Decode(remoteMsg); err != nil {
-			fmt.Println("Remote message decode error")
+			glog.Error("Remote message decode error")
 		}
 
 		handleBroadcast(remoteMsg)

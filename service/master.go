@@ -5,9 +5,9 @@ package service
 import (
 	"bytes"
 	"encoding/gob"
-	"fmt"
 	"net"
 
+	"github.com/golang/glog"
 	"github.com/yangsf5/claw/center"
 	"github.com/yangsf5/claw/service/master"
 )
@@ -22,13 +22,13 @@ type Master struct {
 }
 
 func (s *Master) ClawCallback(session int, source string, msgType int, msg interface{}) {
-	fmt.Printf("Service.Master recv type=%v msg=%v\n", msgType, msg)
+	glog.Infof("Service.Master recv type=%v msg=%v", msgType, msg)
 	switch msgType {
 	case center.MsgTypeHarbor:
 		if concrete, ok := msg.(*RemoteMessage); ok {
 			var buffer bytes.Buffer
 			if err := gob.NewEncoder(&buffer).Encode(concrete); err != nil {
-				fmt.Println("err", err.Error())
+				glog.Error("err" + err.Error())
 				break
 			}
 			master.Broadcast(buffer.Bytes())
@@ -40,7 +40,7 @@ func (s *Master) ClawStart() {
 	if center.BaseConfig.Master.IsMaster {
 		go s.Listen()
 	} else {
-		fmt.Println("this server is not master, so service.master not start")
+		glog.Info("this server is not master, so service.master not start")
 	}
 }
 
@@ -54,15 +54,15 @@ func (s *Master) Listen() {
 		panic(err)
 	}
 
-	fmt.Println("Service.Master listening", center.BaseConfig.Master.ListenAddr)
+	glog.Infof("Service.Master listening, addr=%s", center.BaseConfig.Master.ListenAddr)
 
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			fmt.Println("Service.Master err", err.Error())
+			glog.Errorf("Service.Master err=%s", err.Error())
 			continue
 		}
-		fmt.Println("Service.Master new connection")
+		glog.Info("Service.Master new connection")
 
 		master.HandleConnection(conn)
 	}

@@ -35,9 +35,9 @@ def start():
         sys.exit(2)
 
     if _type == 'master':
-        os.system('go run template.go -config=./config/config_master.xml')
+        os.system('go run template.go -alsologtostderr=true -config=./config/config_master.xml')
     elif _type == 'harbor1':
-        os.system('go run template.go -config=./config/config_harbor1.xml')
+        os.system('go run template.go -alsologtostderr=true -config=./config/config_harbor1.xml')
     else:
         usage()
 

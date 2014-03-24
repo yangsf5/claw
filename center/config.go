@@ -14,9 +14,8 @@ var (
 	BaseConfig BaseConfigPack
 )
 
-func init() {
+func initConfig() {
 	flag.Parse()
-
 	GetConfig(&BaseConfig)
 }
 

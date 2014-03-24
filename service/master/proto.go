@@ -3,7 +3,7 @@
 package master
 
 import (
-	"fmt"
+	"github.com/golang/glog"
 )
 
 type Handler interface {
@@ -22,7 +22,7 @@ type Login struct {
 func (m *Login) Handle(node *Node) {
 	node.Name = m.Name
 	if ret := nodes.AddPeer(node.Name, node); !ret {
-		fmt.Println("Master.proto add peer fail, repeated, node.Name:", node.Name)
+		glog.Errorf("Master.proto add peer fail, repeated, node.Name=%s", node.Name)
 	}
 }
 

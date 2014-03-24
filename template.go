@@ -3,9 +3,9 @@
 package main
 
 import (
-	"fmt"
 	"time"
 
+	"github.com/golang/glog"
 	"github.com/yangsf5/claw/center"
 	"github.com/yangsf5/claw/service"
 )
@@ -14,7 +14,7 @@ var (
 )
 
 func main() {
-	fmt.Println("Claw start!")
+	glog.Info("Claw start!")
 
 	service.Register()
 	center.Use([]string{"Error", "Master", "Harbor", "Test", "Gate"})
@@ -26,6 +26,7 @@ func main() {
 		time.Sleep(100 * time.Millisecond)
 	}
 
-	fmt.Println("Claw exit!")
+	glog.Info("Claw exit!")
+	glog.Flush()
 }
 

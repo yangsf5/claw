@@ -4,7 +4,6 @@ package center
 
 import (
 	"fmt"
-	"os"
 )
 
 const (
@@ -44,13 +43,15 @@ func init() {
 func Register(name string, service Service) {
 	_, ok := services[name]
 	if ok {
-		fmt.Println("[Center.Register] service name is existed, name=" + name)
-		os.Exit(2)
+		panic("[Center.Register] service name is existed, name=" + name)
 	}
 	services[name] = service
 }
 
 func Use(names []string) {
+	// Need init config before start services
+	initConfig()
+
 	for _, name := range names {
 		serv, ok := services[name]
 		if ok {
@@ -73,8 +74,7 @@ func Use(names []string) {
 
 			channels[name] = channel
 		} else {
-			fmt.Println("[Center.Use] service is not found, name=" + name)
-			os.Exit(2)
+			panic("[Center.Use] service is not found, name=" + name)
 		}
 	}
 
@@ -86,8 +86,7 @@ func check() {
 	for _, need := range needs {
 		_, ok := channels[need]
 		if !ok {
-			fmt.Println("[Center.Check] lack a service, name=" + need)
-			os.Exit(2)
+			panic("[Center.Check] lack a service, name=" + need)
 		}
 	}
 }

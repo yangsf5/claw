@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/golang/glog"
 	"github.com/yangsf5/claw/center"
 	"github.com/yangsf5/claw/service"
 	myService "github.com/yangsf5/claw/example/stress/service"
@@ -43,6 +44,7 @@ func main() {
 	}
 
 	fmt.Println("Stress exit!")
+	glog.Flush()
 }
 
 func prompt() {

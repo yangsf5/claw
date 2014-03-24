@@ -7,9 +7,9 @@ import (
 	"bufio"
 	"encoding/binary"
 	"encoding/gob"
-	"fmt"
 	"net"
 
+	"github.com/golang/glog"
 	myNet "github.com/yangsf5/claw/engine/net"
 )
 
@@ -30,7 +30,7 @@ func (n *Node) Handle() {
 	cb := func(reader *bufio.Reader, err error) {
 		if err != nil {
 			nodes.DelPeer(n.Name)
-			fmt.Println("Node die")
+			glog.Info("Node die")
 			return
 		}
 
@@ -55,7 +55,7 @@ func (n *Node) Handle() {
 		binary.Read(bytes.NewBuffer(bodyBuf), binary.BigEndian, &packetId)
 		handlerFunc, ok := handlers[packetId]
 		if !ok {
-			fmt.Printf("packet id error, pid=%d\n", packetId)
+			glog.Errorf("packet id error, pid=%d", packetId)
 			return
 		}
 
@@ -64,11 +64,11 @@ func (n *Node) Handle() {
 		msgBuf := bytes.NewBuffer(bodyBuf[2:])
 		err = gob.NewDecoder(msgBuf).Decode(handler)
 		if err != nil {
-			fmt.Printf("packet decode error, pid=%d err=%s\n", packetId, err.Error())
+			glog.Errorf("packet decode error, pid=%d err=%s", packetId, err.Error())
 			return
 		}
 
-		fmt.Println("packet is", handler)
+		glog.Infof("packet is %v", handler)
 
 		handler.Handle(n)
 	}
