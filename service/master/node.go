@@ -30,7 +30,7 @@ func (n *Node) Handle() {
 	cb := func(reader *bufio.Reader, err error) {
 		if err != nil {
 			nodes.DelPeer(n.Name)
-			glog.Info("Node die")
+			glog.Infof("Node die, name=%s", n.Name)
 			return
 		}
 

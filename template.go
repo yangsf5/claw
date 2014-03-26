@@ -17,7 +17,7 @@ func main() {
 	glog.Info("Claw start!")
 
 	service.Register()
-	center.Use([]string{"Error", "Master", "Harbor", "Test", "Gate"})
+	center.Use([]string{"Error", "Master", "Harbor", "Test"})
 
 	center.Send("main", "Test", 1, center.MsgTypeText, "hello, test service")
 	center.Send("main", "Error", 1, center.MsgTypeText, "sth. is wrong")

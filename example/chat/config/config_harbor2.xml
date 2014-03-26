@@ -5,4 +5,6 @@
 
 	<!--id(current harbor id)-->
 	<harbor id="2"></harbor>
+
+	<gate listenAddr=":11002"></gate>
 </clawconfig>

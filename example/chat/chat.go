@@ -3,6 +3,7 @@
 package main
 
 import (
+	"net"
 	"time"
 
 	"github.com/golang/glog"
@@ -14,10 +15,11 @@ var (
 )
 
 func main() {
-	glog.Info("Chat start!")
-
 	service.Register()
+	service.GateRegisterConnHandler(connHandle)
 	center.Use([]string{"Error", "Master", "Harbor", "Gate"})
+
+	glog.Info("Chat start!")
 
 	for {
 		time.Sleep(100 * time.Millisecond)
@@ -27,3 +29,6 @@ func main() {
 	glog.Flush()
 }
 
+func connHandle(conn net.Conn) {
+	glog.Info(conn)
+}

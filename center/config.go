@@ -37,6 +37,7 @@ type BaseConfigPack struct {
 	XMLName xml.Name `xml:"clawconfig"`
 	Master MasterConfig `xml:"master"`
 	Harbor HarborConfig `xml:"harbor"`
+	Gate GateConfig `xml:"gate"`
 }
 
 type MasterConfig struct {
@@ -46,4 +47,8 @@ type MasterConfig struct {
 
 type HarborConfig struct {
 	Id string `xml:"id,attr"`
+}
+
+type GateConfig struct {
+	ListenAddr string `xml:"listenAddr,attr"`
 }

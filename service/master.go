@@ -59,7 +59,7 @@ func (s *Master) Listen() {
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			glog.Errorf("Service.Master err=%s", err.Error())
+			glog.Errorf("Service.Master accept error, err=%s", err.Error())
 			continue
 		}
 		glog.Info("Service.Master new connection")
