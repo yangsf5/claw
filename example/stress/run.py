@@ -34,14 +34,16 @@ def start():
         usage()
         sys.exit(2)
 
+    common_str = 'go run stress/stress.go -logtostderr=true -config=./stress/config/';
+
     if _type == 'mock_server':
-        os.system('go run mock_server.go')
+        os.system('go run mock_server/mock_server.go')
     elif _type == 'master':
-        os.system('go run stress.go -logtostderr=true -config="./config/config_master.xml"')
+        os.system(common_str + 'config_master.xml')
     elif _type == 'harbor1':
-        os.system('go run stress.go -logtostderr=true -config=./config/config_harbor1.xml')
+        os.system(common_str + '/config_harbor1.xml')
     elif _type == 'harbor2':
-        os.system('go run stress.go -logtostderr=true -config=./config/config_harbor2.xml')
+        os.system(common_str + '/config_harbor2.xml')
     else:
         usage()
 
