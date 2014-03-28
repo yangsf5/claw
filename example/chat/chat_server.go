@@ -3,6 +3,7 @@
 package main
 
 import (
+	"bufio"
 	"net"
 	"time"
 
@@ -17,6 +18,7 @@ var (
 )
 
 type Client struct {
+	name string
 	conn net.Conn
 }
 
@@ -25,13 +27,13 @@ func (c *Client) Send(msg []byte) {
 }
 
 func init() {
-	clients = clawNet.NewGroup
+	clients = clawNet.NewGroup()
 }
 
 func main() {
 	service.Register()
 	service.GateRegisterConnHandler(connHandle)
-	center.Use([]string{"Error", "Master", "Harbor", "Gate"})
+	center.Use([]string{"Error", "Gate"})
 
 	glog.Info("Chat start!")
 
@@ -44,21 +46,22 @@ func main() {
 }
 
 func connHandle(conn net.Conn) {
-	defer conn.Close()
-	clients.AddPeer(conn.RemoteAddr(), client)
+	client := &Client{conn.RemoteAddr().String(), conn}
+	clients.AddPeer(client.name, client)
 
 	cb := func(reader *bufio.Reader, err error) {
 		if err != nil {
-			clients.DelPeer(conn.RemoteAddr())
-			glog.Infof("Event: %s leave", conn.RemoteAddr())
+			defer conn.Close()
+			clients.DelPeer(client.name)
+			glog.Infof("[Event]: %s leave", client.name)
 			return
 		}
 
-		n := reader.Buffered()
-		packBuf := make([]byte, n)
+		packBuf := make([]byte, 512)
 		reader.Read(packBuf)
-		glog.Infof("%s say: %s", conn.RemoteAddr(), string(packBuf))
+		glog.Infof("%s say: %s", client.name, string(packBuf))
+		clients.Broadcast(packBuf)
 	}
 
-	clawNet.RecvLoop(conn, cb)
+	go clawNet.RecvLoop(conn, cb)
 }

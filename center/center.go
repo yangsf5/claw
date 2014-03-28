@@ -50,7 +50,7 @@ func Register(name string, service Service) {
 
 func Use(names []string) {
 	// Need init config before start services
-	initConfig()
+	InitConfig()
 
 	for _, name := range names {
 		serv, ok := services[name]
