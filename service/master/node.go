@@ -35,20 +35,20 @@ func (n *Node) Handle() {
 		}
 
 		// Check size
-		sizeBuf, err := reader.Peek(2)
+		sizeBuf, err := reader.Peek(4)
 		if err != nil {
 			return
 		}
-		var size uint16
+		var size uint32
 		binary.Read(bytes.NewBuffer(sizeBuf), binary.BigEndian, &size)
-		if _, err = reader.Peek(2+int(size)); err != nil {
+		if _, err = reader.Peek(4+int(size)); err != nil {
 			return
 		}
 
 		// Read Body
-		packBuf := make([]byte, 2 + int(size))
+		packBuf := make([]byte, 4 + int(size))
 		reader.Read(packBuf)
-		bodyBuf := packBuf[2:]
+		bodyBuf := packBuf[4:]
 
 		// Parse packet id from body
 		var packetId uint16
