@@ -8,7 +8,7 @@ import sys
 def usage():
     print 'usage:'
     print '-h\n\thelp'
-    print '-t server type\n\t(mock_server or master or harbor1 or harbor2)'
+    print '-t server type\n\t(server or client)'
 
 def main(argv):
     try:
@@ -34,16 +34,11 @@ def start():
         usage()
         sys.exit(2)
 
-    common_str = 'go run stress/stress.go -logtostderr=true -config=./stress/config/';
-
-    if _type == 'mock_server':
-        os.system('go run mock_server/mock_server.go')
-    elif _type == 'master':
-        os.system(common_str + 'config_master.xml')
-    elif _type == 'harbor1':
-        os.system(common_str + '/config_harbor1.xml')
-    elif _type == 'harbor2':
-        os.system(common_str + '/config_harbor2.xml')
+    common_str = ' -logtostderr=true -config=./config/config_master.xml';
+    if _type == 'server':
+        os.system('go run chat_server.go' + common_str)
+    elif _type == 'client':
+        os.system('go run client.go' + common_str)
     else:
         usage()
 

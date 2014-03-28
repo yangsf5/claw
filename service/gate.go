@@ -3,24 +3,36 @@
 package service
 
 import (
-	"fmt"
 	"net"
+
+	"github.com/golang/glog"
+	"github.com/yangsf5/claw/center"
 )
+
+var (
+	gateConnHandler func(conn net.Conn)
+)
+
+func GateRegisterConnHandler(handler func(conn net.Conn)) {
+	gateConnHandler = handler
+}
 
 type Gate struct {
 }
 
-
-func (s* Gate) ClawCallback(session int, source string, msgType int, msg interface{}) {
+func (s *Gate) ClawCallback(session int, source string, msgType int, msg interface{}) {
 }
 
-func (s* Gate) ClawStart() {
-//	go gateListen()
+func (s *Gate) ClawStart() {
+	go s.Listen()
 }
 
-func gateListen() {
-	//TODO config addr
-	addr := ":8888"
+func (s *Gate) Listen() {
+	if gateConnHandler == nil {
+		panic("Service.Gate lack gateConnHandler")
+	}
+
+	addr := center.BaseConfig.Gate.ListenAddr
 	tcpAddr, err := net.ResolveTCPAddr("tcp", addr)
 	if err != nil {
 		panic(err)
@@ -30,12 +42,17 @@ func gateListen() {
 		panic(err)
 	}
 
+	glog.Infof("Service.Gate listening, addr=%s", addr)
+
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
+			glog.Errorf("Service.Gate accept error, err=%s", err.Error())
 			continue
 		}
+		glog.Info("Service.Gate new connection")
 
-		fmt.Println(conn)
+		gateConnHandler(conn)
 	}
 }
+
