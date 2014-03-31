@@ -9,7 +9,7 @@ import (
 	"github.com/golang/glog"
 	"github.com/yangsf5/claw/center"
 	"github.com/yangsf5/claw/service"
-	myService "github.com/yangsf5/claw/example/stress/service"
+	myService "github.com/yangsf5/claw/example/stress/stress/service"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 
 	service.Register()
 	myService.Register()
-	center.Use([]string{"Error", "Master", "Harbor", "Gate", "StressAdd"})
+	center.Use([]string{"Error", "Master", "Harbor", "StressAdd"})
 
 	if center.BaseConfig.Master.IsMaster {
 		for {

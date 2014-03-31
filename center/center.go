@@ -3,7 +3,7 @@
 package center
 
 import (
-	"fmt"
+	"github.com/golang/glog"
 )
 
 const (
@@ -50,7 +50,7 @@ func Register(name string, service Service) {
 
 func Use(names []string) {
 	// Need init config before start services
-	initConfig()
+	InitConfig()
 
 	for _, name := range names {
 		serv, ok := services[name]
@@ -82,7 +82,8 @@ func Use(names []string) {
 }
 
 func check() {
-	needs := []string{"Error"}
+	//needs := []string{"Error"}
+	needs := []string{}
 	for _, need := range needs {
 		_, ok := channels[need]
 		if !ok {
@@ -94,7 +95,7 @@ func check() {
 func Send(source, destination string, session int, msgType int, msg interface{}) {
 	channel, ok := channels[destination]
 	if !ok {
-		Error("Center", fmt.Sprintf("[Send] destination is not found, source=%s destination=%s", source, destination))
+		glog.Errorf("Center.Send destination is not found, source=%s destination=%s", source, destination)
 		return
 	}
 	channel <- message{
@@ -103,9 +104,5 @@ func Send(source, destination string, session int, msgType int, msg interface{})
 		dataType: msgType,
 		data: msg,
 	}
-}
-
-func Error(source, msg string) {
-	Send(source, "Error", 0, MsgTypeText, msg)
 }
 
