@@ -11,11 +11,12 @@ import (
 )
 
 var (
-	clients *clawNet.Group
+	clients *clawNet.Group2
+	sessionIdGenerator int
 )
 
 type Client struct {
-	name string
+	id int
 	conn net.Conn
 }
 
@@ -24,24 +25,25 @@ func (c *Client) Send(msg []byte) {
 }
 
 func init() {
-	clients = clawNet.NewGroup()
+	clients = clawNet.NewGroup2()
 }
 
 func ConnHandle(conn net.Conn) {
-	client := &Client{conn.RemoteAddr().String(), conn}
-	clients.AddPeer(client.name, client)
+	sessionIdGenerator++
+	client := &Client{ sessionIdGenerator, conn}
+	clients.AddPeer(client.id, client)
 
 	cb := func(reader *bufio.Reader, err error) {
 		if err != nil {
 			defer conn.Close()
-			clients.DelPeer(client.name)
-			glog.Infof("[Event]: %s leave", client.name)
+			clients.DelPeer(client.id)
+			glog.Infof("[Event]: %d leave", client.id)
 			return
 		}
 
 		packBuf := make([]byte, 512)
 		reader.Read(packBuf)
-		glog.Infof("%s say: %s", client.name, string(packBuf))
+		glog.Infof("%d say: %s", client.id, string(packBuf))
 		clients.Broadcast(packBuf)
 	}
 
