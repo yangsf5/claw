@@ -7,20 +7,24 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/yangsf5/claw/center"
+	"github.com/yangsf5/claw/service/gate"
 )
-
-var (
-	gateConnHandler func(conn net.Conn)
-)
-
-func GateRegisterConnHandler(handler func(conn net.Conn)) {
-	gateConnHandler = handler
-}
 
 type Gate struct {
 }
 
 func (s *Gate) ClawCallback(session int, source string, msgType int, msg interface{}) {
+	glog.Infof("Service.Master recv type=%v msg=%v", msgType, msg)
+	switch msgType {
+	case center.MsgTypeText:
+		if msg, ok := msg.([]byte); ok {
+			if session == 0 {
+				gate.Broadcast(msg)
+			} else {
+				gate.SendSingle(session, msg)
+			}
+		}
+	}
 }
 
 func (s *Gate) ClawStart() {
@@ -28,10 +32,6 @@ func (s *Gate) ClawStart() {
 }
 
 func (s *Gate) Listen() {
-	if gateConnHandler == nil {
-		panic("Service.Gate lack gateConnHandler")
-	}
-
 	addr := center.BaseConfig.Gate.ListenAddr
 	tcpAddr, err := net.ResolveTCPAddr("tcp", addr)
 	if err != nil {
@@ -52,7 +52,7 @@ func (s *Gate) Listen() {
 		}
 		glog.Info("Service.Gate new connection")
 
-		gateConnHandler(conn)
+		gate.ConnHandle(conn)
 	}
 }
 
