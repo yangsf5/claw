@@ -10,13 +10,17 @@ import (
 	clawNet "github.com/yangsf5/claw/engine/net"
 )
 
+type regReaderFunc func(session int, reader *bufio.Reader, err error)
+
 var (
 	clients *clawNet.Group2
 	sessionIdGenerator int
+
+	regReader regReaderFunc
 )
 
 type Client struct {
-	id int
+	session int
 	conn net.Conn
 }
 
@@ -28,23 +32,25 @@ func init() {
 	clients = clawNet.NewGroup2()
 }
 
+func RegsiterReader(reader regReaderFunc) {
+	regReader = reader
+}
+
 func ConnHandle(conn net.Conn) {
 	sessionIdGenerator++
 	client := &Client{ sessionIdGenerator, conn}
-	clients.AddPeer(client.id, client)
+	clients.AddPeer(client.session, client)
 
 	cb := func(reader *bufio.Reader, err error) {
 		if err != nil {
 			defer conn.Close()
-			clients.DelPeer(client.id)
-			glog.Infof("[Event]: %d leave", client.id)
-			return
+			clients.DelPeer(client.session)
+			glog.Infof("Gate lose peer, session=%d", client.session)
 		}
 
-		packBuf := make([]byte, 512)
-		reader.Read(packBuf)
-		glog.Infof("%d say: %s", client.id, string(packBuf))
-		clients.Broadcast(packBuf)
+		if regReader != nil {
+			regReader(client.session, reader, err)
+		}
 	}
 
 	go clawNet.RecvLoop(conn, cb)
@@ -53,3 +59,10 @@ func ConnHandle(conn net.Conn) {
 func Broadcast(msg []byte) {
 	clients.Broadcast(msg)
 }
+
+func SendSingle(session int, msg []byte) {
+	if client := clients.GetPeer(session); client != nil {
+		client.Send(msg)
+	}
+}
+

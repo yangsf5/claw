@@ -17,9 +17,12 @@ func (s *Gate) ClawCallback(session int, source string, msgType int, msg interfa
 	glog.Infof("Service.Master recv type=%v msg=%v", msgType, msg)
 	switch msgType {
 	case center.MsgTypeText:
-		if msg, ok := msg.([]byte); ok&&session==0 {
-			glog.Info(msg)
-			gate.Broadcast(msg)
+		if msg, ok := msg.([]byte); ok {
+			if session == 0 {
+				gate.Broadcast(msg)
+			} else {
+				gate.SendSingle(session, msg)
+			}
 		}
 	}
 }
