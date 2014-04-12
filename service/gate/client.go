@@ -32,7 +32,7 @@ func init() {
 	clients = clawNet.NewGroup2()
 }
 
-func RegsiterReader(reader regReaderFunc) {
+func RegisterReader(reader regReaderFunc) {
 	regReader = reader
 }
 
