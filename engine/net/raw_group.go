@@ -51,9 +51,9 @@ func (g *RawGroup) DelPeer(peerId int) {
 	delete(g.peers, peerId)
 }
 
-type WalkFunc2 func(peerId int, peer Peer)
+type RawWalkFunc func(peerId int, peer Peer)
 
-func (g *RawGroup) Walk(walkFn WalkFunc2) {
+func (g *RawGroup) Walk(walkFn RawWalkFunc) {
 	g.mutex.RLock()
 	defer g.mutex.RUnlock()
 
@@ -62,9 +62,9 @@ func (g *RawGroup) Walk(walkFn WalkFunc2) {
 	}
 }
 
-type CondFunc2 func(peerId int, peer Peer) bool
+type RawCondFunc func(peerId int, peer Peer) bool
 
-func (g *RawGroup) Find(condFn CondFunc2) (peerId int, peer Peer) {
+func (g *RawGroup) Find(condFn RawCondFunc) (peerId int, peer Peer) {
 	g.mutex.RLock()
 	defer g.mutex.RUnlock()
 
