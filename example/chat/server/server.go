@@ -53,7 +53,8 @@ func regReader(session int, reader *bufio.Reader, err error) {
 	}
 
 	packBuf := make([]byte, 512)
-	reader.Read(packBuf)
-	glog.Infof("%d say: %s", session, string(packBuf))
-	center.Send("main", "Gate", 0, center.MsgTypeText, packBuf)
+	n, _ := reader.Read(packBuf)
+	msg := packBuf[:n]
+	glog.Infof("%d say: %s", session, string(msg))
+	center.Send("main", "Gate", 0, center.MsgTypeText, msg)
 }
