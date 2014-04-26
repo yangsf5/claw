@@ -14,7 +14,7 @@ type Gate struct {
 }
 
 func (s *Gate) ClawCallback(session int, source string, msgType int, msg interface{}) {
-	glog.Infof("Service.Master recv type=%v msg=%v", msgType, msg)
+	glog.Infof("Service.Gate recv type=%v msg=%v", msgType, msg)
 	switch msgType {
 	case center.MsgTypeText:
 		if msg, ok := msg.([]byte); ok {
