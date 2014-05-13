@@ -89,3 +89,11 @@ func (n *Node) Send(msg []byte) {
 	}
 }
 
+var (
+	nodes *myNet.Group
+)
+
+func init() {
+	nodes = myNet.NewGroup()
+}
+

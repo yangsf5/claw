@@ -11,6 +11,7 @@ import (
 	"github.com/yangsf5/claw/center"
 	clawNet "github.com/yangsf5/claw/engine/net"
 	"github.com/yangsf5/claw/service"
+	"github.com/yangsf5/claw/service/gate"
 )
 
 var (
@@ -32,7 +33,7 @@ func init() {
 
 func main() {
 	service.Register()
-	service.GateRegisterConnHandler(connHandle)
+	gate.RegisterReader(regReader)
 	center.Use([]string{"Error", "Gate"})
 
 	glog.Info("Chat start!")
@@ -45,23 +46,15 @@ func main() {
 	glog.Flush()
 }
 
-func connHandle(conn net.Conn) {
-	client := &Client{conn.RemoteAddr().String(), conn}
-	clients.AddPeer(client.name, client)
-
-	cb := func(reader *bufio.Reader, err error) {
-		if err != nil {
-			defer conn.Close()
-			clients.DelPeer(client.name)
-			glog.Infof("[Event]: %s leave", client.name)
-			return
-		}
-
-		packBuf := make([]byte, 512)
-		reader.Read(packBuf)
-		glog.Infof("%s say: %s", client.name, string(packBuf))
-		clients.Broadcast(packBuf)
+func regReader(session int, reader *bufio.Reader, err error) {
+	if err != nil {
+		glog.Infof("[Event]: %d leave", session)
+		return
 	}
 
-	go clawNet.RecvLoop(conn, cb)
+	packBuf := make([]byte, 512)
+	n, _ := reader.Read(packBuf)
+	msg := packBuf[:n]
+	glog.Infof("%d say: %s", session, string(msg))
+	center.Send("main", "Gate", 0, center.MsgTypeText, msg)
 }
