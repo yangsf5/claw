@@ -13,7 +13,7 @@ import (
 type regReaderFunc func(session int, reader *bufio.Reader, err error)
 
 var (
-	clients *clawNet.Group2
+	clients *clawNet.RawGroup
 	sessionIdGenerator int
 
 	regReader regReaderFunc
@@ -29,10 +29,10 @@ func (c *Client) Send(msg []byte) {
 }
 
 func init() {
-	clients = clawNet.NewGroup2()
+	clients = clawNet.NewRawGroup()
 }
 
-func RegsiterReader(reader regReaderFunc) {
+func RegisterReader(reader regReaderFunc) {
 	regReader = reader
 }
 

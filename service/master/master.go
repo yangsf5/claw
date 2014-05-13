@@ -11,13 +11,6 @@ func HandleConnection(conn net.Conn) {
 	go node.Handle()
 }
 
-func HandleHarborMsg(msg interface{}) {
-	if handler, ok := msg.(Handler); ok {
-		//TODO tidy this type handle
-		handler.Handle(nil)
-	}
-}
-
 func Broadcast(content []byte) {
 	nodes.Broadcast(content)
 }

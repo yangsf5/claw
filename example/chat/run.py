@@ -36,7 +36,7 @@ def start():
 
     common_str = ' -logtostderr=true -config=./config/config_master.xml';
     if _type == 'server':
-        os.system('go run chat_server.go' + common_str)
+        os.system('go run ./server/server.go' + common_str)
     elif _type == 'client':
         os.system('go run client.go' + common_str)
     else:

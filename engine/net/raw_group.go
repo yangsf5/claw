@@ -6,15 +6,15 @@ import (
 	"sync"
 )
 
-type Group2 struct {
+type RawGroup struct {
 	peers map[int] Peer
 	mutex sync.RWMutex
 
 	broadcast chan []byte
 }
 
-func NewGroup2() *Group2 {
-	g := &Group2{}
+func NewRawGroup() *RawGroup {
+	g := &RawGroup{}
 	g.peers = make(map[int] Peer)
 	g.broadcast = make(chan []byte)
 
@@ -22,7 +22,7 @@ func NewGroup2() *Group2 {
 	return g
 }
 
-func (g *Group2) AddPeer(peerId int, peer Peer) bool {
+func (g *RawGroup) AddPeer(peerId int, peer Peer) bool {
 	g.mutex.Lock()
 	defer g.mutex.Unlock()
 
@@ -33,7 +33,7 @@ func (g *Group2) AddPeer(peerId int, peer Peer) bool {
 	return true
 }
 
-func (g *Group2) GetPeer(peerId int) Peer {
+func (g *RawGroup) GetPeer(peerId int) Peer {
 	g.mutex.RLock()
 	defer g.mutex.RUnlock()
 
@@ -44,16 +44,16 @@ func (g *Group2) GetPeer(peerId int) Peer {
 	return nil
 }
 
-func (g *Group2) DelPeer(peerId int) {
+func (g *RawGroup) DelPeer(peerId int) {
 	g.mutex.Lock()
 	defer g.mutex.Unlock()
 
 	delete(g.peers, peerId)
 }
 
-type WalkFunc2 func(peerId int, peer Peer)
+type RawWalkFunc func(peerId int, peer Peer)
 
-func (g *Group2) Walk(walkFn WalkFunc2) {
+func (g *RawGroup) Walk(walkFn RawWalkFunc) {
 	g.mutex.RLock()
 	defer g.mutex.RUnlock()
 
@@ -62,9 +62,9 @@ func (g *Group2) Walk(walkFn WalkFunc2) {
 	}
 }
 
-type CondFunc2 func(peerId int, peer Peer) bool
+type RawCondFunc func(peerId int, peer Peer) bool
 
-func (g *Group2) Find(condFn CondFunc2) (peerId int, peer Peer) {
+func (g *RawGroup) Find(condFn RawCondFunc) (peerId int, peer Peer) {
 	g.mutex.RLock()
 	defer g.mutex.RUnlock()
 
@@ -77,15 +77,15 @@ func (g *Group2) Find(condFn CondFunc2) (peerId int, peer Peer) {
 	return -1, nil
 }
 
-func (g *Group2) Broadcast(msg []byte) {
+func (g *RawGroup) Broadcast(msg []byte) {
 	g.broadcast <- msg
 }
 
-func (g *Group2) Close() {
+func (g *RawGroup) Close() {
 	close(g.broadcast)
 }
 
-func (g *Group2) tick() {
+func (g *RawGroup) tick() {
 	for {
 		select {
 		case msg, ok := <-g.broadcast:
