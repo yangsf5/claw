@@ -14,6 +14,7 @@ func Register() {
 		"Error": &Error{},
 		"Test": &Test{},
 		"Gate": &Gate{},
+		"Web": &Web{},
 	}
 
 	for name, cb := range services {
