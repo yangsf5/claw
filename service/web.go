@@ -16,6 +16,6 @@ func (s *Web) ClawCallback(session int, source string, msgType int, msg interfac
 
 func (s *Web) ClawStart() {
 	glog.Infof("Claw.Web service start")
-	web.Start()
+	go web.Start()
 }
 
