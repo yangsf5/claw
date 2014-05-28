@@ -15,5 +15,3 @@
 ```
 ./run.py -t harbor2
 ```
-
-### Then enjoy the master
