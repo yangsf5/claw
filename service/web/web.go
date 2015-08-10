@@ -10,8 +10,8 @@ import (
 	"path"
 	"runtime/debug"
 
-	"code.google.com/p/go.net/websocket"
 	"github.com/golang/glog"
+	"github.com/golang/net/websocket"
 	"github.com/yangsf5/claw/center"
 )
 
