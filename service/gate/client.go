@@ -1,5 +1,3 @@
-// Author: sheppard(ysf1026@gmail.com) 2014-04-11
-
 package gate
 
 import (

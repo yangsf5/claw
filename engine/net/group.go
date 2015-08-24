@@ -1,5 +1,3 @@
-// Author: sheppard(ysf1026@gmail.com) 2014-01-19
-
 package net
 
 import (

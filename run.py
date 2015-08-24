@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# Author: sheppard(ysf1026@gmail.com) 2014-03-21
 
 import getopt
 import os

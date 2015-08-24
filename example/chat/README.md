@@ -7,7 +7,7 @@
 ```
 ./run.py -t client
 ```
-#### 3. RUn another client
+#### 3. Run another client
 ```
 ./run.py -t client
 ```
