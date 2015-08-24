@@ -19,3 +19,8 @@ please see the README.md in examples
 
 Services 
 ====
+
+
+Code Flow
+====
+![Code Flow](http://7xlbbk.dl1.z0.glb.clouddn.com/claw/arch/code-flow.png)
