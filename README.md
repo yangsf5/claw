@@ -1,7 +1,7 @@
 Run
 ====
 
-game server engine (golang)
+game server framework & engine (golang)
 
 ### Run template
 #### 1. Run master
