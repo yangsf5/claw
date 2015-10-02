@@ -1,8 +1,11 @@
-Run
+Claw
 ====
+[![GoDoc](https://godoc.org/github.com/yangsf5/claw?status.svg)](https://godoc.org/github.com/yangsf5/claw)
 
 game server framework & engine (golang)
 
+Run
+====
 ### Run template
 #### 1. Run master
 ```
@@ -57,6 +60,3 @@ Engine
 ### net
 TODO
 
-GoDoc
-====
-[![GoDoc](https://godoc.org/github.com/yangsf5/claw?status.svg)](https://godoc.org/github.com/yangsf5/claw)
