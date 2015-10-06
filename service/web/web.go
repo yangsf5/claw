@@ -9,7 +9,8 @@ import (
 	"runtime/debug"
 
 	"github.com/golang/glog"
-	"github.com/golang/net/websocket"
+	"golang.org/x/net/websocket"
+
 	"github.com/yangsf5/claw/center"
 )
 
